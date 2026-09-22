@@ -125,10 +125,11 @@ https://<домен>/oauth/authorize/?client_id=...&response_type=code&redirect_
 ├── .env.example      # шаблон конфигурации
 ├── .gitignore        # исключает .env
 ├── README.md
-└── static/
-    ├── index.html
-    ├── app.js        # логика: поиск, загрузка КП, форма, отправка
-    └── app.css
+├── static/
+│   ├── index.html
+│   ├── app.js        # логика: поиск, загрузка КП, форма, отправка
+│   └── app.css
+└── n8n-workflows/    # экспорт всех рабочих процессов n8n + подробное описание (README)
 ```
 
 ## Безопасность
