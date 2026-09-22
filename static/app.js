@@ -371,20 +371,9 @@
       return;
     }
 
-    var contact = state.contact || {};
-    var contactName = [contact.LAST_NAME, contact.NAME, contact.SECOND_NAME].filter(Boolean).join(' ');
-
     var payload = {
-      source: 'proflab-kp',
       deal_id: state.dealId,
-      deal_title: (state.deal && state.deal.TITLE) || '',
-      contact_id: (state.deal && state.deal.CONTACT_ID) || null,
-      contact_name: contactName,
-      contact_phone: firstValue(contact.PHONE),
-      contact_email: firstValue(contact.EMAIL),
-      items: items,
-      total_items: items.length,
-      created_at: new Date().toISOString()
+      items: items
     };
 
     setStatus('Формируем КП…');

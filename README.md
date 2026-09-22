@@ -108,18 +108,10 @@ https://<домен>/oauth/authorize/?client_id=...&response_type=code&redirect_
 
 ```json
 {
-  "source": "proflab-kp",
-  "deal_id": 2,
-  "deal_title": "Название сделки",
-  "contact_id": 456,
-  "contact_name": "Фамилия Имя Отчество",
-  "contact_phone": "+7…",
-  "contact_email": "…",
+  "deal_id": "2",
   "items": [
     {"наименование": "…", "ед_измерения": "шт.", "артикул": "…", "цена_оптовая": "2193.00", "валюта": "RUB", "кол_во": 3}
-  ],
-  "total_items": 1,
-  "created_at": "2026-09-21T…"
+  ]
 }
 ```
 
