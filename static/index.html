@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Формирование КП — Proflab</title>
+  <link rel="stylesheet" href="/app.css?v=2">
+</head>
+<body>
+  <div id="app">
+    <div class="header">
+      <div class="title">Формирование КП</div>
+      <div class="meta" id="deal-meta"></div>
+      <div class="meta" id="contact-meta"></div>
+    </div>
+
+    <div class="search-block">
+      <input type="text" id="search-input" placeholder="Поиск позиции по наименованию (мин. 3 символа)…" autocomplete="off">
+      <div id="suggestions" class="suggestions"></div>
+    </div>
+
+    <table class="items" id="items-table">
+      <thead>
+        <tr>
+          <th class="c-name">Наименование</th>
+          <th class="c-unit">Ед. изм.</th>
+          
+          <th class="c-qty">Кол-во</th>
+          <th class="c-del"></th>
+        </tr>
+      </thead>
+      <tbody id="items-body"></tbody>
+    </table>
+    <div class="empty-hint" id="empty-hint">Позиции не выбраны. Начните поиск выше.</div>
+
+    <div class="footer">
+      <div class="total" id="total"></div>
+      <button id="create-kp" class="btn-primary" disabled>Создать КП</button>
+    </div>
+    <div id="status" class="status"></div>
+  </div>
+
+  <script src="//api.bitrix24.com/api/v1/"></script>
+  <script src="/app.js?v=5"></script>
+</body>
+</html>
