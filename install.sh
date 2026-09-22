@@ -36,10 +36,11 @@ B24_CLIENT_SECRET="$(prompt "Ключ приложения (client_secret)" "${B
 WEBHOOK_SEARCH_URL="$(prompt "Вебхук «Поиск каталога»" "${WEBHOOK_SEARCH_URL:-}")"
 WEBHOOK_LOAD_URL="$(prompt "Вебхук «Загрузка КП»" "${WEBHOOK_LOAD_URL:-}")"
 WEBHOOK_CREATE_URL="$(prompt "Вебхук «Создание КП»" "${WEBHOOK_CREATE_URL:-}")"
+WEBHOOK_UNITS_URL="$(prompt "Вебхук «Единицы измерения»" "${WEBHOOK_UNITS_URL:-}")"
 
 echo
 echo "--- Проверка параметров ---"
-for v in B24_DOMAIN B24_CLIENT_ID B24_CLIENT_SECRET B24_REDIRECT_URI WEBHOOK_SEARCH_URL WEBHOOK_LOAD_URL WEBHOOK_CREATE_URL; do
+for v in B24_DOMAIN B24_CLIENT_ID B24_CLIENT_SECRET B24_REDIRECT_URI WEBHOOK_SEARCH_URL WEBHOOK_LOAD_URL WEBHOOK_CREATE_URL WEBHOOK_UNITS_URL; do
   if [ -z "${!v}" ]; then
     echo "ОШИБКА: параметр $v не заполнен"
     exit 1
@@ -56,6 +57,7 @@ B24_CLIENT_SECRET=${B24_CLIENT_SECRET}
 WEBHOOK_SEARCH_URL=${WEBHOOK_SEARCH_URL}
 WEBHOOK_LOAD_URL=${WEBHOOK_LOAD_URL}
 WEBHOOK_CREATE_URL=${WEBHOOK_CREATE_URL}
+WEBHOOK_UNITS_URL=${WEBHOOK_UNITS_URL}
 EOF
 chmod 600 .env
 echo ".env записан"

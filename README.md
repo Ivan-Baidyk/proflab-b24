@@ -38,6 +38,7 @@ Bitrix24 (вкладка сделки) → POST → NPM → Flask (контей�
 | Поиск каталога | `WEBHOOK_SEARCH_URL` | `SELECT … FROM proflab."Прайсы" WHERE "Наименование" ILIKE …` |
 | Загрузка КП | `WEBHOOK_LOAD_URL` | `SELECT … FROM proflab."Готовые КП" LEFT JOIN proflab."Прайсы" …` |
 | Создание КП | `WEBHOOK_CREATE_URL` | приём JSON формы КП |
+| Единицы измерения | `WEBHOOK_UNITS_URL` | справочник перевода единиц измерения (для выпадающих списков) |
 
 ## Требования
 
@@ -83,11 +84,12 @@ git clone <репозиторий> && cd <репозиторий>
 | `WEBHOOK_SEARCH_URL` | Вебхук «Поиск каталога» |
 | `WEBHOOK_LOAD_URL` | Вебхук «Загрузка КП» |
 | `WEBHOOK_CREATE_URL` | Вебхук «Создание КП» |
+| `WEBHOOK_UNITS_URL` | Вебхук «Единицы измерения» |
 
 Можно задать переменные заранее (неинтерактивно):
 
 ```bash
-B24_DOMAIN=b24-xxx.bitrix24.ru B24_CLIENT_ID=local.xxxx B24_CLIENT_SECRET=... WEBHOOK_SEARCH_URL=... WEBHOOK_LOAD_URL=... WEBHOOK_CREATE_URL=... ./install.sh
+B24_DOMAIN=b24-xxx.bitrix24.ru B24_CLIENT_ID=local.xxxx B24_CLIENT_SECRET=... WEBHOOK_SEARCH_URL=... WEBHOOK_LOAD_URL=... WEBHOOK_CREATE_URL=... WEBHOOK_UNITS_URL=... ./install.sh
 ```
 
 Установщик запишет `.env`, соберёт Docker-образ и запустит контейнер.

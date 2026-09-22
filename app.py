@@ -30,6 +30,7 @@ def cfg():
         "webhook_search": e.get("WEBHOOK_SEARCH_URL", ""),
         "webhook_load": e.get("WEBHOOK_LOAD_URL", ""),
         "webhook_create": e.get("WEBHOOK_CREATE_URL", ""),
+        "webhook_units": e.get("WEBHOOK_UNITS_URL", ""),
     }
 
 
@@ -151,6 +152,7 @@ def index():
         "webhook_search": c["webhook_search"],
         "webhook_load": c["webhook_load"],
         "webhook_create": c["webhook_create"],
+        "webhook_units": c["webhook_units"],
     }
     inject = "<script>window.AI_CONFIG = " + json.dumps(config, ensure_ascii=False) + ";</script>"
     html = html.replace("</head>", inject + "</head>")

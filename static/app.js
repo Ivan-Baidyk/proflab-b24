@@ -20,6 +20,7 @@
   var SEARCH_URL = CFG.webhook_search || '';
   var KP_LOAD_URL = CFG.webhook_load || '';
   var KP_WEBHOOK_URL = CFG.webhook_create || '';
+  var UNITS_URL = CFG.webhook_units || '';
 
   var state = {
     dealId: null,
@@ -27,6 +28,9 @@
     contact: null,
     items: []
   };
+
+  var unitsRules = [];
+  var unitsLoaded = false;
 
   var searchInput = document.getElementById('search-input');
   var suggestions = document.getElementById('suggestions');
@@ -65,6 +69,67 @@
   function setStatus(msg, isError) {
     statusEl.textContent = msg || '';
     statusEl.className = 'status' + (isError ? ' error' : '');
+  }
+
+  function normalizeUnit(u) {
+    return String(u || '').trim().toLowerCase().replace(/\.+$/, '');
+  }
+
+  function getAlternatives(unit) {
+    var nu = normalizeUnit(unit);
+    var alts = [];
+    var seen = {};
+    unitsRules.forEach(function(rule) {
+      if (normalizeUnit(rule.единица_в_прайсе) === nu) {
+        var alt = rule.единица_в_запросе;
+        if (alt && !seen[normalizeUnit(alt)]) {
+          seen[normalizeUnit(alt)] = true;
+          alts.push(alt);
+        }
+      }
+    });
+    return alts;
+  }
+
+  function loadUnitsRules() {
+    if (!UNITS_URL || unitsLoaded) return;
+    unitsLoaded = true;
+    fetch(UNITS_URL)
+      .then(function(resp) { return resp.text(); })
+      .then(function(text) {
+        var data = {};
+        try { data = JSON.parse(text); } catch (e) { data = []; }
+        var rules = [];
+        if (Array.isArray(data) && data.length && data[0] && data[0].правила) {
+          rules = data[0].правила;
+        } else if (data && data.правила) {
+          rules = data.правила;
+        }
+        if (Array.isArray(rules)) {
+          unitsRules = rules;
+          if (state.items.length) renderItems();
+        }
+      })
+      .catch(function() {});
+  }
+
+  function buildUnitCell(item, i) {
+    var alts = getAlternatives(item.ед_измерения);
+    if (!alts.length) {
+      return '<td class="c-unit">' + escapeHtml(item.ед_измерения) + '</td>';
+    }
+    var options = [item.ед_измерения].concat(alts);
+    var seen = {};
+    var html = '<td class="c-unit"><select class="unit-select" data-index="' + i + '">';
+    options.forEach(function(o) {
+      var n = normalizeUnit(o);
+      if (seen[n]) return;
+      seen[n] = true;
+      var sel = (normalizeUnit(o) === normalizeUnit(item.ед_измерения)) ? ' selected' : '';
+      html += '<option value="' + escapeHtml(o) + '"' + sel + '>' + escapeHtml(o) + '</option>';
+    });
+    html += '</select></td>';
+    return html;
   }
 
   function getEntityIdFromPage() {
@@ -239,11 +304,12 @@
     createBtn.disabled = false;
 
     state.items.forEach(function(item, i) {
+      var unitCell = buildUnitCell(item, i);
       var tr = document.createElement('tr');
       tr.innerHTML =
         '<td class="c-name">' + escapeHtml(item.наименование) +
           (item.артикул ? '<div class="c-art">арт. ' + escapeHtml(item.артикул) + '</div>' : '') + '</td>' +
-        '<td class="c-unit">' + escapeHtml(item.ед_измерения) + '</td>' +
+        unitCell +
         '<td class="c-qty"><input type="number" min="0" step="1" value="' + escapeHtml(item.кол_во) + '" data-index="' + i + '"></td>' +
         '<td class="c-del"><button class="btn-del" data-index="' + i + '" title="Удалить">×</button></td>';
       itemsBody.appendChild(tr);
@@ -255,6 +321,12 @@
         var v = parseFloat(inp.value);
         if (!isNaN(v) && v >= 0) state.items[idx].кол_во = v;
         updateTotal();
+      });
+    });
+    itemsBody.querySelectorAll('.unit-select').forEach(function(sel) {
+      sel.addEventListener('change', function() {
+        var idx = parseInt(sel.getAttribute('data-index'), 10);
+        state.items[idx].ед_измерения = sel.value;
       });
     });
     itemsBody.querySelectorAll('.btn-del').forEach(function(btn) {
@@ -346,5 +418,6 @@
     }
   });
 
+  loadUnitsRules();
   loadContext();
 })();
